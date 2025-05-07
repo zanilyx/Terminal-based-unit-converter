@@ -834,11 +834,8 @@ void show_unit_info(const char *unit) {
 
 // Add function to format numbers nicely
 void format_number(double num, char *buffer, size_t size) {
-    if (fabs(num) < 0.000001 || fabs(num) >= 1000000) {
-        snprintf(buffer, size, "%.2e", num);
-    } else {
-        snprintf(buffer, size, "%.6g", num);
-    }
+    // Always use normal decimal notation
+    snprintf(buffer, size, "%.10g", num);
 }
 
 // Manage favorite conversions
