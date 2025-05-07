@@ -33,12 +33,12 @@
 #define HISTORY_FILE "conversion_history.txt"
 
 typedef struct {
-    char name[16];
+    char name[32];
     char symbol[8];
     double factor;
     char category[32];
     bool is_temp;
-    char aliases[MAX_ALIASES][8];
+    char aliases[MAX_ALIASES][16];
     int alias_count;
 } Unit;
 
