@@ -815,52 +815,6 @@ void show_main_menu() {
     printf("Enter your choice: ");
 }
 
-// Direct conversion from command line
-void direct_conversion(int argc, char *argv[]) {
-    if (argc != 4) {
-        print_error("Usage: ./conv [value] [from_unit] [to_unit]");
-        exit(1);
-    }
-    
-    char *endptr;
-    double value = strtod(argv[1], &endptr);
-    if (endptr == argv[1] || *endptr != '\0') {
-        print_error("Invalid value specified");
-        exit(1);
-    }
-    
-    char from[16], to[16];
-    strncpy(from, argv[2], sizeof(from)-1);
-    from[sizeof(from)-1] = '\0';
-    
-    strncpy(to, argv[3], sizeof(to)-1);
-    to[sizeof(to)-1] = '\0';
-    
-    normalize_unit_name(from);
-    normalize_unit_name(to);
-    
-    // Check if units exist (in any category)
-    bool from_valid = false, to_valid = false;
-    for (int i = 0; i < unit_count; i++) {
-        char normalized_symbol[8];
-        strcpy(normalized_symbol, units[i].symbol);
-        normalize_unit_name(normalized_symbol);
-        
-        if (strcmp(normalized_symbol, from) == 0) from_valid = true;
-        if (strcmp(normalized_symbol, to) == 0) to_valid = true;
-    }
-    
-    if (!from_valid || !to_valid) {
-        print_error("Invalid unit specified");
-        exit(1);
-    }
-    
-    double result = convert_value(value, from, to);
-    printf("%.8g %s = %.8g %s\n", value, from, result, to);
-    add_history_entry(from, to, value, result);
-    exit(0);
-}
-
 // Add new function to show unit information
 void show_unit_info(const char *unit) {
     for (int i = 0; i < unit_count; i++) {
@@ -1232,11 +1186,6 @@ int main(int argc, char *argv[]) {
     // Load conversion history and favorites
     load_history();
     load_favorites();
-    
-    // Handle direct conversion from command line
-    if (argc > 1) {
-        direct_conversion(argc, argv);
-    }
     
     // Interactive mode
     while (1) {
