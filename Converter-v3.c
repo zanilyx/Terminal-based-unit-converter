@@ -834,8 +834,8 @@ void show_unit_info(const char *unit) {
 
 // Add function to format numbers nicely
 void format_number(double num, char *buffer, size_t size) {
-    // Always use normal decimal notation
-    snprintf(buffer, size, "%.10g", num);
+    // Always use scientific notation
+    snprintf(buffer, size, "%.2e", num);
 }
 
 // Manage favorite conversions
