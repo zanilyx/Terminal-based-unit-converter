@@ -839,14 +839,22 @@ void format_number(double num, char *buffer, size_t size) {
         return;
     }
 
-    // Get the exponent
-    int exponent = (int)floor(log10(fabs(num)));
+    // Count the number of digits
+    int digits = (int)ceil(log10(fabs(num) + 1));
     
-    // Calculate the mantissa
-    double mantissa = num / pow(10, exponent);
-    
-    // Format the number as x × 10^n
-    snprintf(buffer, size, "%.2f × 10^%d", mantissa, exponent);
+    if (digits > 6) {
+        // Get the exponent
+        int exponent = (int)floor(log10(fabs(num)));
+        
+        // Calculate the mantissa
+        double mantissa = num / pow(10, exponent);
+        
+        // Format the number as x × 10^n
+        snprintf(buffer, size, "%.2f × 10^%d", mantissa, exponent);
+    } else {
+        // Use normal decimal format for smaller numbers
+        snprintf(buffer, size, "%.6g", num);
+    }
 }
 
 // Manage favorite conversions
