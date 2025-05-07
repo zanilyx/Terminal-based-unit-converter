@@ -834,8 +834,19 @@ void show_unit_info(const char *unit) {
 
 // Add function to format numbers nicely
 void format_number(double num, char *buffer, size_t size) {
-    // Always use scientific notation
-    snprintf(buffer, size, "%.2e", num);
+    if (num == 0) {
+        snprintf(buffer, size, "0");
+        return;
+    }
+
+    // Get the exponent
+    int exponent = (int)floor(log10(fabs(num)));
+    
+    // Calculate the mantissa
+    double mantissa = num / pow(10, exponent);
+    
+    // Format the number as x × 10^n
+    snprintf(buffer, size, "%.2f × 10^%d", mantissa, exponent);
 }
 
 // Manage favorite conversions
