@@ -32,7 +32,6 @@
 #define MAX_CATEGORIES 20       // Maximum number of unit categories
 #define MAX_ALIASES 10          // Maximum number of aliases per unit
 #define MAX_FAVORITES 20        // Maximum number of favorite conversions
-#define MAX_QUICK_CONVERSIONS 10 // Maximum number of quick conversions
 #define HISTORY_FILE "conversion_history.txt" // History file name
 
 // Data structures for units and conversions
@@ -92,8 +91,6 @@ char categories[MAX_CATEGORIES][32];
 int category_count = 0;
 Favorite favorites[MAX_FAVORITES];
 int favorite_count = 0;
-char quick_conversions[MAX_QUICK_CONVERSIONS][32];
-int quick_conversion_count = 0;
 
 // Function prototypes
 void initialize_units();
@@ -118,8 +115,6 @@ void show_unit_info(const char *unit);
 void add_favorite(const char *from, const char *to, const char *category);
 void remove_favorite(int index);
 void show_favorites();
-void add_quick_conversion(const char *conversion);
-void show_quick_conversions();
 void show_help();
 void format_number(double num, char *buffer, size_t size);
 void save_favorites();
@@ -807,10 +802,9 @@ void show_main_menu() {
     
     printf("\n");
     printf("%2d. Favorites\n", category_count+1);
-    printf("%2d. Quick Conversions\n", category_count+2);
-    printf("%2d. History\n", category_count+3);
-    printf("%2d. Help\n", category_count+4);
-    printf("%2d. Quit\n\n", category_count+5);
+    printf("%2d. History\n", category_count+2);
+    printf("%2d. Help\n", category_count+3);
+    printf("%2d. Quit\n\n", category_count+4);
     
     printf("Enter your choice: ");
 }
@@ -945,26 +939,6 @@ void show_favorites() {
     getchar();
 }
 
-// Add function to show quick conversions
-void show_quick_conversions() {
-    clear_screen();
-    print_header("Quick Conversions");
-    
-    if (quick_conversion_count == 0) {
-        print_error("No quick conversions added yet!");
-    } else {
-        printf("%-5s %-25s %-15s\n", "No.", "Quick Conversion", "Actions");
-        
-        for (int i = 0; i < quick_conversion_count; i++) {
-            printf("%-5d %-25s %-15s\n", 
-                   i+1, quick_conversions[i], quick_conversions[i]);
-        }
-    }
-    
-    printf("\nPress Enter to continue...");
-    getchar();
-}
-
 // Add function to show help
 void show_help() {
     clear_screen();
@@ -984,7 +958,6 @@ void show_help() {
     printf("\nTips:\n");
     printf("- Use unit symbols (e.g., 'km' for kilometer)\n");
     printf("- Add frequently used conversions to favorites\n");
-    printf("- Use quick conversion mode for common conversions\n");
     printf("- View unit info to learn more about each unit\n");
     
     printf("\nPress Enter to continue...");
@@ -1025,21 +998,6 @@ void remove_favorite(int index) {
     
     favorite_count--;
     print_success("Favorite removed successfully!");
-}
-
-// Add function to add a quick conversion
-void add_quick_conversion(const char *conversion) {
-    if (quick_conversion_count >= MAX_QUICK_CONVERSIONS) {
-        print_error("Maximum number of quick conversions reached!");
-        return;
-    }
-    
-    strncpy(quick_conversions[quick_conversion_count], conversion, 
-            sizeof(quick_conversions[quick_conversion_count])-1);
-    quick_conversions[quick_conversion_count][sizeof(quick_conversions[quick_conversion_count])-1] = '\0';
-    
-    quick_conversion_count++;
-    print_success("Quick conversion added successfully!");
 }
 
 // Add function to save favorites to file
@@ -1185,8 +1143,35 @@ int main(int argc, char *argv[]) {
     load_history();
     load_favorites();
     
-    // Show main menu
-    show_main_menu();
+    // Main program loop
+    while (1) {
+        show_main_menu();
+        
+        char choice[16];
+        fgets(choice, sizeof(choice), stdin);
+        
+        int selected = atoi(choice);
+        if (selected >= 1 && selected <= category_count) {
+            handle_conversion(categories[selected-1]);
+        } else if (selected == category_count+1) {
+            show_favorites();
+        } else if (selected == category_count+2) {
+            show_history();
+        } else if (selected == category_count+3) {
+            show_help();
+        } else if (selected == category_count+4 || 
+                  (choice[0] == 'q' || choice[0] == 'Q')) {
+            // Save favorites before exiting
+            save_favorites();
+            clear_screen();
+            printf("\nThank you for using Ultimate Unit Converter!\n\n");
+            break;
+        } else {
+            print_error("Invalid choice! Please try again.");
+            printf("\nPress Enter to continue...");
+            getchar();
+        }
+    }
     
     return 0;
 } 
