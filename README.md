@@ -1,29 +1,33 @@
-# Terminal Unit Converter
+# Ultimate Unit Converter
 
-A powerful command-line unit converter that supports multiple categories of unit conversions with a clean, user-friendly interface.
+A powerful command-line unit converter with advanced features and a clean, user-friendly interface.
 
 ## Features
 
-- **Multiple Categories**: Length, Temperature, Data, Mass, Time, Volume, and more
-- **Scientific Notation Support**: Handles both small and large numbers
-- **Conversion History**: Keeps track of your recent conversions
-- **Direct Command Line Usage**: Quick conversions without entering interactive mode
-- **Case-Insensitive Input**: Accepts units in any case (KM, km, Km)
-- **Error Handling**: Robust input validation and error messages
+- **Multiple Categories**: Length, Temperature, Digital Storage, Mass, Time, Volume, Area, Speed, Energy, Power, Pressure
+- **Unit Prefix Support**: Handles prefixes like kilo (k), mega (M), milli (m), etc.
+- **Favorites System**: Save and manage your most-used conversions
+- **Conversion History**: Track your conversions with timestamps
+- **Export to CSV**: Export conversion history for analysis
+- **Quick Conversion Mode**: Fast access to common conversions
+- **Batch Conversion**: Convert multiple values at once
+- **Unit Information**: Detailed information about each unit
+- **Scientific Notation**: Handles both small and large numbers
+- **Unit Aliases**: Support for alternative unit names
 - **Temperature Conversion**: Special handling for temperature units
 
 ## Installation
 
 1. Clone the repository:
-```bash
-git clone https://github.com/yourusername/terminal-unit-converter.git
-cd terminal-unit-converter
-```
+   ```bash
+   git clone https://github.com/zanilyx/Terminal-based-unit-converter.git
+   cd Terminal-based-unit-converter
+   ```
 
 2. Compile the program:
-```bash
-gcc -std=c17 -o converter Converter-v3.c -lm
-```
+   ```bash
+   gcc Converter-v3.c -o converter -lm
+   ```
 
 ## Usage
 
@@ -36,11 +40,23 @@ gcc -std=c17 -o converter Converter-v3.c -lm
 ```bash
 ./converter [value] [from_unit] [to_unit]
 ```
-
 Example:
 ```bash
 ./converter 100 km mi
 ```
+
+### Unit Prefixes
+- k (kilo) = 1000
+- M (mega) = 1,000,000
+- G (giga) = 1e9
+- T (tera) = 1e12
+- m (milli) = 0.001
+- u (micro) = 1e-6
+- n (nano) = 1e-9
+- p (pico) = 1e-12
+- c (centi) = 0.01
+- d (deci) = 0.1
+- h (hecto) = 100
 
 ## Supported Categories
 
@@ -53,13 +69,15 @@ Example:
 - Foot (ft)
 - Yard (yd)
 - Mile (mi)
+- Light Year (ly)
 
 ### Temperature
 - Celsius (C)
 - Fahrenheit (F)
 - Kelvin (K)
 
-### Data
+### Digital Storage
+- Bit (b)
 - Byte (B)
 - Kilobyte (KB)
 - Megabyte (MB)
@@ -87,10 +105,49 @@ Example:
 - Quart (qt)
 - Pint (pt)
 
+### Area
+- Square Meter (m²)
+- Square Kilometer (km²)
+- Square Foot (ft²)
+- Square Mile (mi²)
+- Acre (ac)
+
+### Speed
+- Meter per Second (m/s)
+- Kilometer per Hour (km/h)
+- Mile per Hour (mph)
+- Knot (kt)
+
+### Energy
+- Joule (J)
+- Calorie (cal)
+- Kilowatt Hour (kWh)
+- Electron Volt (eV)
+
+### Power
+- Watt (W)
+- Horsepower (hp)
+- Kilowatt (kW)
+
+### Pressure
+- Pascal (Pa)
+- Bar (bar)
+- Atmosphere (atm)
+- PSI (psi)
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details. 
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgments
+
+- Thanks to all contributors who have helped improve this project
+- Inspired by the need for a simple yet powerful unit conversion tool 
