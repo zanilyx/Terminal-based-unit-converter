@@ -130,8 +130,9 @@ double parse_value_with_prefix(const char *input, char *unit) {
     // Skip any spaces
     while (*endptr == ' ') endptr++;
     
-    // Check if this is a data storage unit
+    // Check if this is a data storage unit or time unit
     bool is_data_storage = false;
+    bool is_time_unit = false;
     for (int i = 0; i < unit_count; i++) {
         char normalized_symbol[8];
         strcpy(normalized_symbol, units[i].symbol);
@@ -142,15 +143,18 @@ double parse_value_with_prefix(const char *input, char *unit) {
         temp_unit[15] = '\0';
         normalize_unit_name(temp_unit);
         
-        if (strcmp(normalized_symbol, temp_unit) == 0 && 
-            strcmp(units[i].category, "Digital Storage") == 0) {
-            is_data_storage = true;
+        if (strcmp(normalized_symbol, temp_unit) == 0) {
+            if (strcmp(units[i].category, "Digital Storage") == 0) {
+                is_data_storage = true;
+            } else if (strcmp(units[i].category, "Time") == 0) {
+                is_time_unit = true;
+            }
             break;
         }
     }
     
-    // Only apply prefixes if not a data storage unit
-    if (!is_data_storage) {
+    // Only apply prefixes if not a data storage unit and not a time unit
+    if (!is_data_storage && !is_time_unit) {
         // Check for prefix
         for (int i = 0; prefixes[i].prefix != '\0'; i++) {
             if (*endptr == prefixes[i].prefix) {
