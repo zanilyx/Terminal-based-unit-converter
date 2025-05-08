@@ -130,8 +130,9 @@ double parse_value_with_prefix(const char *input, char *unit) {
     // Skip any spaces
     while (*endptr == ' ') endptr++;
     
-    // Check if this is a data storage unit
+    // Check if this is a data storage unit or time unit
     bool is_data_storage = false;
+    bool is_time_unit = false;
     for (int i = 0; i < unit_count; i++) {
         char normalized_symbol[8];
         strcpy(normalized_symbol, units[i].symbol);
@@ -142,15 +143,18 @@ double parse_value_with_prefix(const char *input, char *unit) {
         temp_unit[15] = '\0';
         normalize_unit_name(temp_unit);
         
-        if (strcmp(normalized_symbol, temp_unit) == 0 && 
-            strcmp(units[i].category, "Digital Storage") == 0) {
-            is_data_storage = true;
+        if (strcmp(normalized_symbol, temp_unit) == 0) {
+            if (strcmp(units[i].category, "Digital Storage") == 0) {
+                is_data_storage = true;
+            } else if (strcmp(units[i].category, "Time") == 0) {
+                is_time_unit = true;
+            }
             break;
         }
     }
     
-    // Only apply prefixes if not a data storage unit
-    if (!is_data_storage) {
+    // Only apply prefixes if not a data storage unit and not a time unit
+    if (!is_data_storage && !is_time_unit) {
         // Check for prefix
         for (int i = 0; prefixes[i].prefix != '\0'; i++) {
             if (*endptr == prefixes[i].prefix) {
@@ -367,17 +371,60 @@ void initialize_units() {
     units[unit_count++] = (Unit){"Pint", "pt", 0.473176473, "Volume", false, {{""}, {""}}, 0};
 
     // Area
-    units[unit_count++] = (Unit){"Square Meter", "m2", 1.0, "Area", false, {{"sqm"}, {""}}, 1};
-    units[unit_count++] = (Unit){"Square Kilometer", "km2", 1000000.0, "Area", false, {{"sqkm"}, {""}}, 1};
-    units[unit_count++] = (Unit){"Square Foot", "ft2", 0.09290304, "Area", false, {{"sqft"}, {""}}, 1};
-    units[unit_count++] = (Unit){"Square Mile", "mi2", 2589988.110336, "Area", false, {{"sqmi"}, {""}}, 1};
-    units[unit_count++] = (Unit){"Acre", "ac", 4046.8564224, "Area", false, {{""}, {""}}, 0};
+    units[unit_count++] = (Unit){
+        "Square Meter", "m2", 1.0, "Area", false,
+        {"sqm", "m²", "M2", "", "", "", "", "", "", ""}, 3,
+        "Base unit of area in the metric system"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Square Kilometer", "km2", 1000000.0, "Area", false,
+        {"sqkm", "km²", "KM2", "", "", "", "", "", "", ""}, 3,
+        "1,000,000 square meters"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Square Foot", "ft2", 0.09290304, "Area", false,
+        {"sqft", "ft²", "FT2", "", "", "", "", "", "", ""}, 3,
+        "Imperial unit of area"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Square Mile", "mi2", 2589988.110336, "Area", false,
+        {"sqmi", "mi²", "MI2", "", "", "", "", "", "", ""}, 3,
+        "Imperial unit of area, 640 acres"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Acre", "ac", 4046.8564224, "Area", false,
+        {"acres", "ac", "AC", "", "", "", "", "", "", ""}, 3,
+        "Imperial unit of area, 43,560 square feet"
+    };
 
     // Speed
-    units[unit_count++] = (Unit){"Meter per Second", "m/s", 1.0, "Speed", false, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Kilometer per Hour", "km/h", 0.277777778, "Speed", false, {{"kph"}, {""}}, 1};
-    units[unit_count++] = (Unit){"Mile per Hour", "mph", 0.44704, "Speed", false, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Knot", "kt", 0.514444444, "Speed", false, {{""}, {""}}, 0};
+    units[unit_count++] = (Unit){
+        "Meter per Second", "m/s", 1.0, "Speed", false,
+        {"mps", "MPS", "", "", "", "", "", "", "", ""}, 2,
+        "Base unit of speed in the metric system"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Kilometer per Hour", "km/h", 0.277777778, "Speed", false,
+        {"kph", "kmph", "KPH", "", "", "", "", "", "", ""}, 3,
+        "Common unit of speed, 0.277777778 m/s"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Mile per Hour", "mph", 0.44704, "Speed", false,
+        {"MPH", "", "", "", "", "", "", "", "", ""}, 1,
+        "Imperial unit of speed, 0.44704 m/s"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Knot", "kt", 0.514444444, "Speed", false,
+        {"knots", "KT", "", "", "", "", "", "", "", ""}, 2,
+        "Nautical unit of speed, 0.514444444 m/s"
+    };
 
     // Initialize categories
     strcpy(categories[category_count++], "Length");
