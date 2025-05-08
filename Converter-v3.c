@@ -422,26 +422,32 @@ void initialize_units() {
     // Speed
     units[unit_count++] = (Unit){
         "Meter per Second", "m/s", 1.0, "Speed", false,
-        {"mps", "MPS", "", "", "", "", "", "", "", ""}, 2,
+        {"mps", "MPS", "m/s", "", "", "", "", "", "", ""}, 3,
         "Base unit of speed in the metric system"
     };
     
     units[unit_count++] = (Unit){
         "Kilometer per Hour", "km/h", 0.277777778, "Speed", false,
-        {"kph", "kmph", "KPH", "", "", "", "", "", "", ""}, 3,
+        {"kph", "kmph", "KPH", "km/h", "", "", "", "", "", ""}, 4,
         "Common unit of speed, 0.277777778 m/s"
     };
     
     units[unit_count++] = (Unit){
         "Mile per Hour", "mph", 0.44704, "Speed", false,
-        {"MPH", "", "", "", "", "", "", "", "", ""}, 1,
+        {"MPH", "mi/h", "", "", "", "", "", "", "", ""}, 2,
         "Imperial unit of speed, 0.44704 m/s"
     };
     
     units[unit_count++] = (Unit){
         "Knot", "kt", 0.514444444, "Speed", false,
-        {"knots", "KT", "", "", "", "", "", "", "", ""}, 2,
+        {"knots", "KT", "nm/h", "", "", "", "", "", "", ""}, 3,
         "Nautical unit of speed, 0.514444444 m/s"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Foot per Second", "ft/s", 0.3048, "Speed", false,
+        {"fps", "FPS", "ft/s", "", "", "", "", "", "", ""}, 3,
+        "Imperial unit of speed, 0.3048 m/s"
     };
 
     // Initialize categories
