@@ -417,7 +417,13 @@ void get_clean_input(char *buffer, size_t size) {
 
 // Normalize unit names (case insensitive, remove spaces)
 void normalize_unit_name(char *unit) {
-    // Convert to uppercase
+    // Special case for time units to preserve case
+    if (strcmp(unit, "min") == 0 || strcmp(unit, "hr") == 0 || 
+        strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0) {
+        return; // Don't modify time units
+    }
+    
+    // Convert to uppercase for other units
     for (int i = 0; unit[i]; i++) {
         unit[i] = toupper(unit[i]);
     }
@@ -485,14 +491,31 @@ double convert_value(double value, const char *from, const char *to) {
     
     // Regular conversion
     double from_factor = 1.0, to_factor = 1.0;
+    bool found_from = false, found_to = false;
     
     for (int i = 0; i < unit_count; i++) {
         char normalized_symbol[8];
         strcpy(normalized_symbol, units[i].symbol);
         normalize_unit_name(normalized_symbol);
         
-        if (strcmp(normalized_symbol, from) == 0) from_factor = units[i].factor;
-        if (strcmp(normalized_symbol, to) == 0) to_factor = units[i].factor;
+        if (strcmp(normalized_symbol, from) == 0) {
+            from_factor = units[i].factor;
+            found_from = true;
+        }
+        if (strcmp(normalized_symbol, to) == 0) {
+            to_factor = units[i].factor;
+            found_to = true;
+        }
+    }
+    
+    if (!found_from || !found_to) {
+        print_error("Invalid unit conversion!");
+        return value;
+    }
+    
+    // Handle potential overflow for large numbers
+    if (fabs(value) > 1e15) {
+        print_error("Warning: Very large number, precision may be affected");
     }
     
     return value * from_factor / to_factor;
