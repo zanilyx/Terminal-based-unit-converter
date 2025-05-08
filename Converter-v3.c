@@ -132,12 +132,34 @@ double parse_value_with_prefix(const char *input, char *unit) {
     // Skip any spaces
     while (*endptr == ' ') endptr++;
     
-    // Check for prefix
-    for (int i = 0; prefixes[i].prefix != '\0'; i++) {
-        if (*endptr == prefixes[i].prefix) {
-            value *= prefixes[i].factor;
-            endptr++; // Move past the prefix
+    // Check if this is a data storage unit
+    bool is_data_storage = false;
+    for (int i = 0; i < unit_count; i++) {
+        char normalized_symbol[8];
+        strcpy(normalized_symbol, units[i].symbol);
+        normalize_unit_name(normalized_symbol);
+        
+        char temp_unit[16];
+        strncpy(temp_unit, endptr, 15);
+        temp_unit[15] = '\0';
+        normalize_unit_name(temp_unit);
+        
+        if (strcmp(normalized_symbol, temp_unit) == 0 && 
+            strcmp(units[i].category, "Digital Storage") == 0) {
+            is_data_storage = true;
             break;
+        }
+    }
+    
+    // Only apply prefixes if not a data storage unit
+    if (!is_data_storage) {
+        // Check for prefix
+        for (int i = 0; prefixes[i].prefix != '\0'; i++) {
+            if (*endptr == prefixes[i].prefix) {
+                value *= prefixes[i].factor;
+                endptr++; // Move past the prefix
+                break;
+            }
         }
     }
     
@@ -679,7 +701,7 @@ void handle_conversion(const char *category) {
     
     // Get value and unit together
     while (attempts < 3) {
-        printf("\nEnter value and unit (e.g., '10m' for 10 milli, '2k' for 2000): ");
+        printf("\nEnter value and unit: ");
         if (fgets(input, sizeof(input), stdin)) {
             input[strcspn(input, "\n")] = '\0';
             
