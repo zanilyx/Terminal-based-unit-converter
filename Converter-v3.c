@@ -272,26 +272,44 @@ void initialize_units() {
     // Energy
     units[unit_count++] = (Unit){
         "Joule", "J", 1.0, "Energy", false,
-        {{""}, {""}}, 0,
+        {"joules", "j", "J", "", "", "", "", "", "", ""}, 3,
         "SI unit of energy"
     };
     
     units[unit_count++] = (Unit){
         "Calorie", "cal", 4.184, "Energy", false,
-        {{""}, {""}}, 0,
+        {"calories", "cal", "CAL", "", "", "", "", "", "", ""}, 3,
         "Amount of energy needed to raise 1g of water by 1°C"
     };
     
     units[unit_count++] = (Unit){
         "Kilowatt Hour", "kWh", 3600000.0, "Energy", false,
-        {{""}, {""}}, 0,
+        {"kwh", "KWH", "", "", "", "", "", "", "", ""}, 2,
         "Unit of energy equal to 1 kilowatt of power for 1 hour"
     };
     
     units[unit_count++] = (Unit){
         "Electron Volt", "eV", 1.602e-19, "Energy", false,
-        {{""}, {""}}, 0,
+        {"ev", "EV", "electronvolt", "", "", "", "", "", "", ""}, 3,
         "Energy gained by an electron moving through 1 volt"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Kilojoule", "kJ", 1000.0, "Energy", false,
+        {"kilojoules", "kj", "KJ", "", "", "", "", "", "", ""}, 3,
+        "1000 joules"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Megajoule", "MJ", 1000000.0, "Energy", false,
+        {"megajoules", "mj", "MJ", "", "", "", "", "", "", ""}, 3,
+        "1 million joules"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Kilocalorie", "kcal", 4184.0, "Energy", false,
+        {"kilocalories", "kcal", "KCAL", "", "", "", "", "", "", ""}, 3,
+        "1000 calories, commonly used in nutrition"
     };
     
     // Power
