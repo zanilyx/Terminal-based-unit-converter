@@ -13,8 +13,7 @@
  * - Scientific notation for large/small numbers
  * - Unit aliases support
  * 
- * Author: Ritesh
- * License: MIT
+ 
  */
 
 #include <stdio.h>
