@@ -348,19 +348,19 @@ void initialize_units() {
     
     units[unit_count++] = (Unit){
         "Hour", "hr", 3600.0, "Time", false,
-        {"hours", "HR", "h", "", "", "", "", "", "", ""}, 3,
+        {"hours", "HR", "h", "hour", "", "", "", "", "", ""}, 4,
         "60 minutes, 3600 seconds"
     };
     
     units[unit_count++] = (Unit){
         "Day", "day", 86400.0, "Time", false,
-        {"days", "DAY", "", "", "", "", "", "", "", ""}, 2,
+        {"days", "DAY", "d", "", "", "", "", "", "", ""}, 3,
         "24 hours, 86400 seconds"
     };
     
     units[unit_count++] = (Unit){
         "Week", "week", 604800.0, "Time", false,
-        {"weeks", "WEEK", "", "", "", "", "", "", "", ""}, 2,
+        {"weeks", "WEEK", "w", "", "", "", "", "", "", ""}, 3,
         "7 days, 604800 seconds"
     };
 
@@ -442,7 +442,8 @@ void normalize_unit_name(char *unit) {
     // Special case for time units to preserve case
     if (strcmp(unit, "min") == 0 || strcmp(unit, "hr") == 0 || 
         strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0 ||
-        strcmp(unit, "s") == 0) {
+        strcmp(unit, "s") == 0 || strcmp(unit, "h") == 0 ||
+        strcmp(unit, "d") == 0 || strcmp(unit, "w") == 0) {
         return; // Don't modify time units
     }
     
@@ -465,10 +466,8 @@ void normalize_unit_name(char *unit) {
 bool unit_exists(const char *unit, const char *category) {
     for (int i = 0; i < unit_count; i++) {
         if (strcmp(units[i].category, category) == 0 || strcmp(category, "All") == 0) {
-            char normalized_symbol[8];
-            strcpy(normalized_symbol, units[i].symbol);
-            normalize_unit_name(normalized_symbol);
-            if (strcmp(normalized_symbol, unit) == 0) {
+            // Check exact match with symbol
+            if (strcmp(units[i].symbol, unit) == 0) {
                 return true;
             }
             // Check aliases
