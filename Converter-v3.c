@@ -199,37 +199,31 @@ void initialize_units() {
     
     // Digital Storage
     units[unit_count++] = (Unit){
-        "Bit", "b", 1.0, "Digital Storage", false,
+        "Byte", "B", 1.0, "Digital Storage", false,
         {{""}, {""}}, 0,
-        "Smallest unit of digital information"
+        "Basic unit of digital storage"
     };
     
     units[unit_count++] = (Unit){
-        "Byte", "B", 8.0, "Digital Storage", false,
-        {{""}, {""}}, 0,
-        "8 bits, basic unit of digital storage"
-    };
-    
-    units[unit_count++] = (Unit){
-        "Kilobyte", "KB", 8192.0, "Digital Storage", false,
+        "Kilobyte", "KB", 1024.0, "Digital Storage", false,
         {{""}, {""}}, 0,
         "1024 bytes"
     };
     
     units[unit_count++] = (Unit){
-        "Megabyte", "MB", 8388608.0, "Digital Storage", false,
+        "Megabyte", "MB", 1048576.0, "Digital Storage", false,
         {{""}, {""}}, 0,
         "1024 kilobytes"
     };
     
     units[unit_count++] = (Unit){
-        "Gigabyte", "GB", 8589934592.0, "Digital Storage", false,
+        "Gigabyte", "GB", 1073741824.0, "Digital Storage", false,
         {{""}, {""}}, 0,
         "1024 megabytes"
     };
     
     units[unit_count++] = (Unit){
-        "Terabyte", "TB", 8796093022208.0, "Digital Storage", false,
+        "Terabyte", "TB", 1099511627776.0, "Digital Storage", false,
         {{""}, {""}}, 0,
         "1024 gigabytes"
     };
