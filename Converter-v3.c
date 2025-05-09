@@ -29,7 +29,6 @@
 #define MAX_UNITS 200           // Maximum number of supported units
 #define MAX_CATEGORIES 20       // Maximum number of unit categories
 #define MAX_ALIASES 10          // Maximum number of aliases per unit
-#define MAX_FAVORITES 20        // Maximum number of favorite conversions
 #define HISTORY_FILE "conversion_history.txt" // History file name
 
 // Data structures for units and conversions
@@ -51,12 +50,6 @@ typedef struct {
     double result;
     time_t timestamp;
 } ConversionEntry;
-
-typedef struct {
-    char from[16];
-    char to[16];
-    char category[32];
-} Favorite;
 
 // Add unit prefix handling
 typedef struct {
@@ -87,8 +80,6 @@ ConversionEntry history[MAX_HISTORY];
 int history_count = 0;
 char categories[MAX_CATEGORIES][32];
 int category_count = 0;
-Favorite favorites[MAX_FAVORITES];
-int favorite_count = 0;
 
 // Function prototypes
 void initialize_units();
@@ -110,15 +101,9 @@ void save_history();
 void load_history();
 void batch_conversion();
 void show_unit_info(const char *unit);
-void add_favorite(const char *from, const char *to, const char *category);
-void remove_favorite(int index);
-void show_favorites();
 void show_help();
 void format_number(double num, char *buffer, size_t size);
-void save_favorites();
-void load_favorites();
 void export_history_to_csv();
-void edit_favorite(int index);
 
 // Function to parse value with unit prefix
 // Handles prefixes like k (kilo), M (mega), m (milli), etc.
@@ -926,10 +911,9 @@ void show_main_menu() {
     }
     
     printf("\n");
-    printf("%2d. Favorites\n", category_count+1);
-    printf("%2d. History\n", category_count+2);
-    printf("%2d. Help\n", category_count+3);
-    printf("%2d. Quit\n\n", category_count+4);
+    printf("%2d. History\n", category_count+1);
+    printf("%2d. Help\n", category_count+2);
+    printf("%2d. Quit\n\n", category_count+3);
     
     printf("Enter your choice: ");
 }
@@ -982,104 +966,6 @@ void format_number(double num, char *buffer, size_t size) {
     }
 }
 
-// Manage favorite conversions
-// Allows adding, removing, and editing favorites
-void show_favorites() {
-    clear_screen();
-    print_header("Favorites");
-    
-    printf("Options:\n");
-    printf("1. View/Manage existing favorites\n");
-    printf("2. Add new favorite\n");
-    printf("3. Return to main menu\n");
-    printf("\nEnter your choice (1-3): ");
-    
-    char choice[16];
-    fgets(choice, sizeof(choice), stdin);
-    
-    switch (choice[0]) {
-        case '1':
-            if (favorite_count == 0) {
-                print_error("No favorites added yet!");
-            } else {
-                printf("\n%-5s %-25s %-15s %-15s\n", "No.", "Conversion", "Category", "Actions");
-                printf("----------------------------------------------------------------\n");
-                
-                for (int i = 0; i < favorite_count; i++) {
-                    char favorite_str[50];
-                    snprintf(favorite_str, sizeof(favorite_str), "%s → %s", 
-                            favorites[i].from, favorites[i].to);
-                    
-                    printf("%-5d %-25s %-15s [U]se [R]emove [I]nfo [E]dit\n", 
-                           i+1, favorite_str, favorites[i].category);
-                }
-                
-                printf("\nEnter number and action (e.g., '1U' to use first favorite): ");
-                char input[16];
-                fgets(input, sizeof(input), stdin);
-                
-                int index = atoi(input) - 1;
-                char action = input[strlen(input)-2];
-                
-                if (index >= 0 && index < favorite_count) {
-                    switch (action) {
-                        case 'U':
-                        case 'u':
-                            handle_conversion(favorites[index].category);
-                            break;
-                        case 'R':
-                        case 'r':
-                            remove_favorite(index);
-                            break;
-                        case 'I':
-                        case 'i':
-                            show_unit_info(favorites[index].from);
-                            show_unit_info(favorites[index].to);
-                            break;
-                        case 'E':
-                        case 'e':
-                            edit_favorite(index);
-                            break;
-                        default:
-                            print_error("Invalid action!");
-                    }
-                } else {
-                    print_error("Invalid favorite number!");
-                }
-            }
-            break;
-            
-        case '2':
-            printf("\nEnter category: ");
-            char category[32];
-            get_clean_input(category, sizeof(category));
-            
-            printf("Enter source unit: ");
-            char from[16];
-            get_clean_input(from, sizeof(from));
-            
-            printf("Enter target unit: ");
-            char to[16];
-            get_clean_input(to, sizeof(to));
-            
-            if (unit_exists(from, category) && unit_exists(to, category)) {
-                add_favorite(from, to, category);
-            } else {
-                print_error("Invalid units or category!");
-            }
-            break;
-            
-        case '3':
-            return;
-            
-        default:
-            print_error("Invalid choice!");
-    }
-    
-    printf("\nPress Enter to continue...");
-    getchar();
-}
-
 // Add function to show help
 void show_help() {
     clear_screen();
@@ -1087,106 +973,20 @@ void show_help() {
     
     printf("Features:\n");
     printf("1. Multiple unit categories\n");
-    printf("2. Favorites system for quick access\n");
-    printf("3. Quick conversion mode\n");
-    printf("4. Conversion history\n");
-    printf("5. Unit information display\n");
-    printf("6. Scientific notation for large/small numbers\n");
-    printf("7. Unit aliases support\n");
-    printf("8. Temperature conversion\n");
-    printf("9. Batch conversion mode\n");
+    printf("2. Quick conversion mode\n");
+    printf("3. Conversion history\n");
+    printf("4. Unit information display\n");
+    printf("5. Scientific notation for large/small numbers\n");
+    printf("6. Unit aliases support\n");
+    printf("7. Temperature conversion\n");
+    printf("8. Batch conversion mode\n");
     
     printf("\nTips:\n");
     printf("- Use unit symbols (e.g., 'km' for kilometer)\n");
-    printf("- Add frequently used conversions to favorites\n");
     printf("- View unit info to learn more about each unit\n");
     
     printf("\nPress Enter to continue...");
     getchar();
-}
-
-// Add function to add a favorite conversion
-void add_favorite(const char *from, const char *to, const char *category) {
-    if (favorite_count >= MAX_FAVORITES) {
-        print_error("Maximum number of favorites reached!");
-        return;
-    }
-    
-    strncpy(favorites[favorite_count].from, from, sizeof(favorites[favorite_count].from)-1);
-    favorites[favorite_count].from[sizeof(favorites[favorite_count].from)-1] = '\0';
-    
-    strncpy(favorites[favorite_count].to, to, sizeof(favorites[favorite_count].to)-1);
-    favorites[favorite_count].to[sizeof(favorites[favorite_count].to)-1] = '\0';
-    
-    strncpy(favorites[favorite_count].category, category, sizeof(favorites[favorite_count].category)-1);
-    favorites[favorite_count].category[sizeof(favorites[favorite_count].category)-1] = '\0';
-    
-    favorite_count++;
-    print_success("Favorite added successfully!");
-}
-
-// Add function to remove a favorite
-void remove_favorite(int index) {
-    if (index < 0 || index >= favorite_count) {
-        print_error("Invalid favorite index!");
-        return;
-    }
-    
-    // Shift remaining favorites down
-    for (int i = index; i < favorite_count-1; i++) {
-        favorites[i] = favorites[i+1];
-    }
-    
-    favorite_count--;
-    print_success("Favorite removed successfully!");
-}
-
-// Add function to save favorites to file
-void save_favorites() {
-    FILE *file = fopen("favorites.txt", "w");
-    if (file == NULL) {
-        print_error("Could not save favorites!");
-        return;
-    }
-    
-    for (int i = 0; i < favorite_count; i++) {
-        fprintf(file, "%s,%s,%s\n", 
-                favorites[i].from,
-                favorites[i].to,
-                favorites[i].category);
-    }
-    
-    fclose(file);
-}
-
-// Add function to load favorites from file
-void load_favorites() {
-    FILE *file = fopen("favorites.txt", "r");
-    if (file == NULL) {
-        return; // No favorites file yet
-    }
-    
-    char line[256];
-    while (fgets(line, sizeof(line), file) && favorite_count < MAX_FAVORITES) {
-        char *from = strtok(line, ",");
-        char *to = strtok(NULL, ",");
-        char *category = strtok(NULL, "\n");
-        
-        if (from && to && category) {
-            strncpy(favorites[favorite_count].from, from, sizeof(favorites[favorite_count].from)-1);
-            favorites[favorite_count].from[sizeof(favorites[favorite_count].from)-1] = '\0';
-            
-            strncpy(favorites[favorite_count].to, to, sizeof(favorites[favorite_count].to)-1);
-            favorites[favorite_count].to[sizeof(favorites[favorite_count].to)-1] = '\0';
-            
-            strncpy(favorites[favorite_count].category, category, sizeof(favorites[favorite_count].category)-1);
-            favorites[favorite_count].category[sizeof(favorites[favorite_count].category)-1] = '\0';
-            
-            favorite_count++;
-        }
-    }
-    
-    fclose(file);
 }
 
 // Add function to export history to CSV
@@ -1218,71 +1018,11 @@ void export_history_to_csv() {
     print_success("History exported to conversion_history.csv");
 }
 
-// Add function to edit favorites
-void edit_favorite(int index) {
-    if (index < 0 || index >= favorite_count) {
-        print_error("Invalid favorite index!");
-        return;
-    }
-    
-    printf("\nEdit Favorite Conversion:\n");
-    printf("1. Change source unit\n");
-    printf("2. Change target unit\n");
-    printf("3. Change category\n");
-    printf("4. Cancel\n");
-    printf("Enter your choice (1-4): ");
-    
-    char choice[16];
-    fgets(choice, sizeof(choice), stdin);
-    
-    switch (choice[0]) {
-        case '1':
-            printf("Enter new source unit: ");
-            get_clean_input(favorites[index].from, sizeof(favorites[index].from));
-            if (!unit_exists(favorites[index].from, favorites[index].category)) {
-                print_error("Invalid unit for this category!");
-                return;
-            }
-            break;
-            
-        case '2':
-            printf("Enter new target unit: ");
-            get_clean_input(favorites[index].to, sizeof(favorites[index].to));
-            if (!unit_exists(favorites[index].to, favorites[index].category)) {
-                print_error("Invalid unit for this category!");
-                return;
-            }
-            break;
-            
-        case '3':
-            printf("Enter new category: ");
-            get_clean_input(favorites[index].category, sizeof(favorites[index].category));
-            // Verify both units exist in the new category
-            if (!unit_exists(favorites[index].from, favorites[index].category) ||
-                !unit_exists(favorites[index].to, favorites[index].category)) {
-                print_error("Invalid category for these units!");
-                return;
-            }
-            break;
-            
-        case '4':
-            return;
-            
-        default:
-            print_error("Invalid choice!");
-            return;
-    }
-    
-    save_favorites();
-    print_success("Favorite updated successfully!");
-}
-
 // Main function
 int main(int argc, char *argv[]) {
     // Initialize the program
     initialize_units();
     load_history();
-    load_favorites();
     
     // Main program loop
     while (1) {
@@ -1295,15 +1035,11 @@ int main(int argc, char *argv[]) {
         if (selected >= 1 && selected <= category_count) {
             handle_conversion(categories[selected-1]);
         } else if (selected == category_count+1) {
-            show_favorites();
-        } else if (selected == category_count+2) {
             show_history();
-        } else if (selected == category_count+3) {
+        } else if (selected == category_count+2) {
             show_help();
-        } else if (selected == category_count+4 || 
+        } else if (selected == category_count+3 || 
                   (choice[0] == 'q' || choice[0] == 'Q')) {
-            // Save favorites before exiting
-            save_favorites();
             clear_screen();
             printf("\nThank you for using Ultimate Unit Converter!\n\n");
             break;
