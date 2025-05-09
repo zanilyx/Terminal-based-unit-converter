@@ -422,31 +422,31 @@ void initialize_units() {
     // Speed
     units[unit_count++] = (Unit){
         "Meter per Second", "m/s", 1.0, "Speed", false,
-        {"mps", "MPS", "m/s", "", "", "", "", "", "", ""}, 3,
+        {"mps", "MPS", "m/s", "ms", "", "", "", "", "", ""}, 4,
         "Base unit of speed in the metric system"
     };
     
     units[unit_count++] = (Unit){
         "Kilometer per Hour", "km/h", 0.277777778, "Speed", false,
-        {"kph", "kmph", "KPH", "km/h", "", "", "", "", "", ""}, 4,
+        {"kph", "kmph", "KPH", "km/h", "kmh", "", "", "", "", ""}, 5,
         "Common unit of speed, 0.277777778 m/s"
     };
     
     units[unit_count++] = (Unit){
         "Mile per Hour", "mph", 0.44704, "Speed", false,
-        {"MPH", "mi/h", "", "", "", "", "", "", "", ""}, 2,
+        {"MPH", "mi/h", "mih", "", "", "", "", "", "", ""}, 3,
         "Imperial unit of speed, 0.44704 m/s"
     };
     
     units[unit_count++] = (Unit){
         "Knot", "kt", 0.514444444, "Speed", false,
-        {"knots", "KT", "nm/h", "", "", "", "", "", "", ""}, 3,
+        {"knots", "KT", "nm/h", "kts", "", "", "", "", "", ""}, 4,
         "Nautical unit of speed, 0.514444444 m/s"
     };
     
     units[unit_count++] = (Unit){
         "Foot per Second", "ft/s", 0.3048, "Speed", false,
-        {"fps", "FPS", "ft/s", "", "", "", "", "", "", ""}, 3,
+        {"fps", "FPS", "ft/s", "fts", "", "", "", "", "", ""}, 4,
         "Imperial unit of speed, 0.3048 m/s"
     };
 
@@ -488,10 +488,11 @@ void get_clean_input(char *buffer, size_t size) {
 
 // Normalize unit names (case insensitive, remove spaces)
 void normalize_unit_name(char *unit) {
-    // Special case for time units to preserve case
+    // Special case for time units and speed units to preserve case
     if (strcmp(unit, "min") == 0 || strcmp(unit, "hr") == 0 || 
-        strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0) {
-        return; // Don't modify time units
+        strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0 ||
+        strstr(unit, "/") != NULL) {  // Check for speed units with "/"
+        return; // Don't modify time units or speed units
     }
     
     // Convert to uppercase for other units
