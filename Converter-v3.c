@@ -378,37 +378,6 @@ void initialize_units() {
         "Imperial unit of area, 43,560 square feet"
     };
 
-    // Speed
-    units[unit_count++] = (Unit){
-        "Meter per Second", "m/s", 1.0, "Speed", false,
-        {"mps", "MPS", "m/s", "ms", "", "", "", "", "", ""}, 4,
-        "Base unit of speed in the metric system"
-    };
-    
-    units[unit_count++] = (Unit){
-        "Kilometer per Hour", "km/h", 0.277777778, "Speed", false,
-        {"kph", "kmph", "KPH", "km/h", "kmh", "", "", "", "", ""}, 5,
-        "Common unit of speed, 0.277777778 m/s"
-    };
-    
-    units[unit_count++] = (Unit){
-        "Mile per Hour", "mph", 0.44704, "Speed", false,
-        {"MPH", "mi/h", "mih", "", "", "", "", "", "", ""}, 3,
-        "Imperial unit of speed, 0.44704 m/s"
-    };
-    
-    units[unit_count++] = (Unit){
-        "Knot", "kt", 0.514444444, "Speed", false,
-        {"knots", "KT", "nm/h", "kts", "", "", "", "", "", ""}, 4,
-        "Nautical unit of speed, 0.514444444 m/s"
-    };
-    
-    units[unit_count++] = (Unit){
-        "Foot per Second", "ft/s", 0.3048, "Speed", false,
-        {"fps", "FPS", "ft/s", "fts", "", "", "", "", "", ""}, 4,
-        "Imperial unit of speed, 0.3048 m/s"
-    };
-
     // Initialize categories
     strcpy(categories[category_count++], "Length");
     strcpy(categories[category_count++], "Temperature");
@@ -417,7 +386,6 @@ void initialize_units() {
     strcpy(categories[category_count++], "Time");
     strcpy(categories[category_count++], "Volume");
     strcpy(categories[category_count++], "Area");
-    strcpy(categories[category_count++], "Speed");
     strcpy(categories[category_count++], "Energy");
     strcpy(categories[category_count++], "Power");
     strcpy(categories[category_count++], "Pressure");
