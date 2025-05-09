@@ -142,52 +142,52 @@ double parse_value_with_prefix(const char *input, char *unit) {
 void initialize_units() {
     // Length
     units[unit_count] = (Unit){
-        "Meter", "m", 1.0, "Length", false, 
-        {{"metre"}, {""}}, 1,
+        "Meter", "m", 1.0, "Length", false,
+        {"metre", "M", "METRE", "", "", "", "", "", "", ""}, 3,
         "Base unit of length in the metric system"
     };
     units[unit_count++].alias_count = 1;
     
     units[unit_count] = (Unit){
         "Kilometer", "km", 1000.0, "Length", false,
-        {{"kilometre"}, {""}}, 1,
+        {"kilometre", "KM", "KILOMETRE", "", "", "", "", "", "", ""}, 3,
         "1000 meters, commonly used for long distances"
     };
     units[unit_count++].alias_count = 1;
     
     units[unit_count++] = (Unit){
         "Centimeter", "cm", 0.01, "Length", false,
-        {{"centimetre"}, {""}}, 1,
+        {"centimetre", "CM", "CENTIMETRE", "", "", "", "", "", "", ""}, 3,
         "One hundredth of a meter"
     };
     
     units[unit_count++] = (Unit){
         "Millimeter", "mm", 0.001, "Length", false,
-        {{"millimetre"}, {""}}, 1,
+        {"millimetre", "MM", "MILLIMETRE", "", "", "", "", "", "", ""}, 3,
         "One thousandth of a meter"
     };
     
     units[unit_count++] = (Unit){
         "Inch", "in", 0.0254, "Length", false,
-        {{""}, {""}}, 0,
+        {"IN", "inches", "", "", "", "", "", "", "", ""}, 2,
         "Imperial unit of length, 1/12 of a foot"
     };
     
     units[unit_count++] = (Unit){
         "Foot", "ft", 0.3048, "Length", false,
-        {{""}, {""}}, 0,
+        {"FT", "feet", "", "", "", "", "", "", "", ""}, 2,
         "Imperial unit of length, 12 inches"
     };
     
     units[unit_count++] = (Unit){
         "Yard", "yd", 0.9144, "Length", false,
-        {{""}, {""}}, 0,
+        {"YD", "yards", "", "", "", "", "", "", "", ""}, 2,
         "Imperial unit of length, 3 feet"
     };
     
     units[unit_count++] = (Unit){
         "Mile", "mi", 1609.344, "Length", false,
-        {{""}, {""}}, 0,
+        {"MI", "miles", "", "", "", "", "", "", "", ""}, 2,
         "Imperial unit of length, 5280 feet"
     };
     
@@ -200,56 +200,56 @@ void initialize_units() {
     // Digital Storage
     units[unit_count++] = (Unit){
         "Byte", "B", 1.0, "Digital Storage", false,
-        {{""}, {""}}, 0,
+        {"byte", "BYTE", "", "", "", "", "", "", "", ""}, 2,
         "Basic unit of digital storage"
     };
     
     units[unit_count++] = (Unit){
         "Kilobyte", "KB", 1024.0, "Digital Storage", false,
-        {{""}, {""}}, 0,
+        {"kilobyte", "KB", "", "", "", "", "", "", "", ""}, 2,
         "1024 bytes"
     };
     
     units[unit_count++] = (Unit){
         "Megabyte", "MB", 1048576.0, "Digital Storage", false,
-        {{""}, {""}}, 0,
+        {"megabyte", "MB", "", "", "", "", "", "", "", ""}, 2,
         "1024 kilobytes"
     };
     
     units[unit_count++] = (Unit){
         "Gigabyte", "GB", 1073741824.0, "Digital Storage", false,
-        {{""}, {""}}, 0,
+        {"gigabyte", "GB", "", "", "", "", "", "", "", ""}, 2,
         "1024 megabytes"
     };
     
     units[unit_count++] = (Unit){
         "Terabyte", "TB", 1099511627776.0, "Digital Storage", false,
-        {{""}, {""}}, 0,
+        {"terabyte", "TB", "", "", "", "", "", "", "", ""}, 2,
         "1024 gigabytes"
     };
     
     // Energy
     units[unit_count++] = (Unit){
         "Joule", "J", 1.0, "Energy", false,
-        {"joules", "j", "J", "", "", "", "", "", "", ""}, 3,
+        {"joule", "J", "", "", "", "", "", "", "", ""}, 2,
         "SI unit of energy"
     };
     
     units[unit_count++] = (Unit){
         "Calorie", "cal", 4.184, "Energy", false,
-        {"calories", "cal", "CAL", "", "", "", "", "", "", ""}, 3,
+        {"calorie", "CAL", "", "", "", "", "", "", "", ""}, 2,
         "Amount of energy needed to raise 1g of water by 1°C"
     };
     
     units[unit_count++] = (Unit){
         "Kilowatt Hour", "kWh", 3600000.0, "Energy", false,
-        {"kwh", "KWH", "", "", "", "", "", "", "", ""}, 2,
+        {"kilowatt-hour", "KWH", "", "", "", "", "", "", "", ""}, 2,
         "Unit of energy equal to 1 kilowatt of power for 1 hour"
     };
     
     units[unit_count++] = (Unit){
         "Electron Volt", "eV", 1.602e-19, "Energy", false,
-        {"ev", "EV", "electronvolt", "", "", "", "", "", "", ""}, 3,
+        {"electronvolt", "EV", "", "", "", "", "", "", "", ""}, 2,
         "Energy gained by an electron moving through 1 volt"
     };
     
@@ -274,51 +274,77 @@ void initialize_units() {
     // Power
     units[unit_count++] = (Unit){
         "Watt", "W", 1.0, "Power", false,
-        {{""}, {""}}, 0,
-        "SI unit of power"
-    };
-    
-    units[unit_count++] = (Unit){
-        "Horsepower", "hp", 745.7, "Power", false,
-        {{""}, {""}}, 0,
-        "Unit of power equal to 550 foot-pounds per second"
+        {"watt", "W", "", "", "", "", "", "", "", ""}, 2,
+        "SI unit of power, equal to one joule per second"
     };
     
     units[unit_count++] = (Unit){
         "Kilowatt", "kW", 1000.0, "Power", false,
-        {{""}, {""}}, 0,
-        "1000 watts"
+        {"kilowatt", "KW", "", "", "", "", "", "", "", ""}, 2,
+        "1000 watts, commonly used for electrical power"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Megawatt", "MW", 1000000.0, "Power", false,
+        {"megawatt", "MW", "", "", "", "", "", "", "", ""}, 2,
+        "1 million watts, used for large power systems"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Horsepower", "hp", 745.7, "Power", false,
+        {"HP", "horsepower", "", "", "", "", "", "", "", ""}, 2,
+        "Unit of power equal to 550 foot-pounds per second"
     };
     
     // Pressure
     units[unit_count++] = (Unit){
         "Pascal", "Pa", 1.0, "Pressure", false,
-        {{""}, {""}}, 0,
-        "SI unit of pressure"
+        {"pascal", "PA", "", "", "", "", "", "", "", ""}, 2,
+        "SI unit of pressure, equal to one newton per square meter"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Kilopascal", "kPa", 1000.0, "Pressure", false,
+        {"kilopascal", "KPA", "", "", "", "", "", "", "", ""}, 2,
+        "1000 pascals, commonly used for atmospheric pressure"
     };
     
     units[unit_count++] = (Unit){
         "Bar", "bar", 100000.0, "Pressure", false,
-        {{""}, {""}}, 0,
+        {"BAR", "bars", "", "", "", "", "", "", "", ""}, 2,
         "Unit of pressure equal to 100,000 pascals"
     };
     
     units[unit_count++] = (Unit){
         "Atmosphere", "atm", 101325.0, "Pressure", false,
-        {{""}, {""}}, 0,
-        "Standard atmospheric pressure"
+        {"ATM", "atmospheres", "", "", "", "", "", "", "", ""}, 2,
+        "Standard atmospheric pressure at sea level"
     };
     
     units[unit_count++] = (Unit){
         "PSI", "psi", 6894.76, "Pressure", false,
-        {{""}, {""}}, 0,
-        "Pounds per square inch"
+        {"PSI", "pounds/sq in", "", "", "", "", "", "", "", ""}, 2,
+        "Pounds per square inch, commonly used in engineering"
     };
     
     // Temperature
-    units[unit_count++] = (Unit){"Celsius", "C", 1.0, "Temperature", true, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Fahrenheit", "F", 1.0, "Temperature", true, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Kelvin", "K", 1.0, "Temperature", true, {{""}, {""}}, 0};
+    units[unit_count++] = (Unit){
+        "Celsius", "°C", 1.0, "Temperature", true,
+        {"celsius", "C", "", "", "", "", "", "", "", ""}, 2,
+        "Temperature scale where water freezes at 0° and boils at 100°"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Fahrenheit", "°F", 1.0, "Temperature", true,
+        {"fahrenheit", "F", "", "", "", "", "", "", "", ""}, 2,
+        "Temperature scale where water freezes at 32° and boils at 212°"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Kelvin", "K", 1.0, "Temperature", true,
+        {"kelvin", "K", "", "", "", "", "", "", "", ""}, 2,
+        "Absolute temperature scale, where 0K is absolute zero"
+    };
 
     // Data
     units[unit_count++] = (Unit){"Kilobyte", "KB", 1024.0, "Data", false, {{""}, {""}}, 0};
@@ -347,58 +373,82 @@ void initialize_units() {
     };
     
     units[unit_count++] = (Unit){
-        "Hour", "hr", 3600.0, "Time", false,
-        {"hours", "HR", "h", "hour", "", "", "", "", "", ""}, 4,
+        "Hour", "h", 3600.0, "Time", false,
+        {"hours", "HR", "hr", "hour", "", "", "", "", "", ""}, 4,
         "60 minutes, 3600 seconds"
     };
     
     units[unit_count++] = (Unit){
-        "Day", "day", 86400.0, "Time", false,
-        {"days", "DAY", "d", "", "", "", "", "", "", ""}, 3,
+        "Day", "d", 86400.0, "Time", false,
+        {"days", "DAY", "day", "", "", "", "", "", "", ""}, 3,
         "24 hours, 86400 seconds"
     };
     
     units[unit_count++] = (Unit){
-        "Week", "week", 604800.0, "Time", false,
+        "Week", "wk", 604800.0, "Time", false,
         {"weeks", "WEEK", "w", "", "", "", "", "", "", ""}, 3,
         "7 days, 604800 seconds"
     };
 
     // Volume
-    units[unit_count++] = (Unit){"Liter", "L", 1.0, "Volume", false, {{"litre"}, {""}}, 1};
-    units[unit_count++] = (Unit){"Milliliter", "mL", 0.001, "Volume", false, {{"millilitre"}, {""}}, 1};
-    units[unit_count++] = (Unit){"Gallon", "gal", 3.785411784, "Volume", false, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Quart", "qt", 0.946352946, "Volume", false, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Pint", "pt", 0.473176473, "Volume", false, {{""}, {""}}, 0};
+    units[unit_count++] = (Unit){
+        "Liter", "L", 1.0, "Volume", false,
+        {"litre", "l", "LITER", "", "", "", "", "", "", ""}, 3,
+        "Base unit of volume in the metric system"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Milliliter", "mL", 0.001, "Volume", false,
+        {"millilitre", "ml", "ML", "", "", "", "", "", "", ""}, 3,
+        "One thousandth of a liter"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Gallon", "gal", 3.785411784, "Volume", false,
+        {"GAL", "gallon", "", "", "", "", "", "", "", ""}, 2,
+        "Imperial unit of volume, 3.785411784 liters"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Quart", "qt", 0.946352946, "Volume", false,
+        {"QT", "quart", "", "", "", "", "", "", "", ""}, 2,
+        "Imperial unit of volume, 0.946352946 liters"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Pint", "pt", 0.473176473, "Volume", false,
+        {"PT", "pint", "", "", "", "", "", "", "", ""}, 2,
+        "Imperial unit of volume, 0.473176473 liters"
+    };
 
     // Area
     units[unit_count++] = (Unit){
-        "Square Meter", "m2", 1.0, "Area", false,
-        {"sqm", "m²", "M2", "", "", "", "", "", "", ""}, 3,
+        "Square Meter", "m²", 1.0, "Area", false,
+        {"sqm", "m2", "M2", "", "", "", "", "", "", ""}, 3,
         "Base unit of area in the metric system"
     };
     
     units[unit_count++] = (Unit){
-        "Square Kilometer", "km2", 1000000.0, "Area", false,
-        {"sqkm", "km²", "KM2", "", "", "", "", "", "", ""}, 3,
+        "Square Kilometer", "km²", 1000000.0, "Area", false,
+        {"sqkm", "km2", "KM2", "", "", "", "", "", "", ""}, 3,
         "1,000,000 square meters"
     };
     
     units[unit_count++] = (Unit){
-        "Square Foot", "ft2", 0.09290304, "Area", false,
-        {"sqft", "ft²", "FT2", "", "", "", "", "", "", ""}, 3,
+        "Square Foot", "ft²", 0.09290304, "Area", false,
+        {"sqft", "ft2", "FT2", "", "", "", "", "", "", ""}, 3,
         "Imperial unit of area"
     };
     
     units[unit_count++] = (Unit){
-        "Square Mile", "mi2", 2589988.110336, "Area", false,
-        {"sqmi", "mi²", "MI2", "", "", "", "", "", "", ""}, 3,
+        "Square Mile", "mi²", 2589988.110336, "Area", false,
+        {"sqmi", "mi2", "MI2", "", "", "", "", "", "", ""}, 3,
         "Imperial unit of area, 640 acres"
     };
     
     units[unit_count++] = (Unit){
         "Acre", "ac", 4046.8564224, "Area", false,
-        {"acres", "ac", "AC", "", "", "", "", "", "", ""}, 3,
+        {"acres", "AC", "", "", "", "", "", "", "", ""}, 2,
         "Imperial unit of area, 43,560 square feet"
     };
 
@@ -443,8 +493,18 @@ void normalize_unit_name(char *unit) {
     if (strcmp(unit, "min") == 0 || strcmp(unit, "hr") == 0 || 
         strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0 ||
         strcmp(unit, "s") == 0 || strcmp(unit, "h") == 0 ||
-        strcmp(unit, "d") == 0 || strcmp(unit, "w") == 0) {
-        return; // Don't modify time units
+        strcmp(unit, "d") == 0 || strcmp(unit, "w") == 0 ||
+        strcmp(unit, "L") == 0 || strcmp(unit, "mL") == 0 ||
+        strcmp(unit, "W") == 0 || strcmp(unit, "kW") == 0 ||
+        strcmp(unit, "MW") == 0 || strcmp(unit, "hp") == 0 ||
+        strcmp(unit, "Pa") == 0 || strcmp(unit, "kPa") == 0 ||
+        strcmp(unit, "bar") == 0 || strcmp(unit, "atm") == 0 ||
+        strcmp(unit, "psi") == 0 ||
+        strcmp(unit, "m") == 0 || strcmp(unit, "km") == 0 ||
+        strcmp(unit, "cm") == 0 || strcmp(unit, "mm") == 0 ||
+        strcmp(unit, "in") == 0 || strcmp(unit, "ft") == 0 ||
+        strcmp(unit, "yd") == 0 || strcmp(unit, "mi") == 0) {
+        return; // Don't modify time units, volume units, power units, pressure units, and length units
     }
     
     // Convert to uppercase for other units
