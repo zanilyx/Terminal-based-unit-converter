@@ -130,51 +130,7 @@ double parse_value_with_prefix(const char *input, char *unit) {
     // Skip any spaces
     while (*endptr == ' ') endptr++;
     
-    // Check if this is a speed unit by looking for "/" in the remaining string
-    if (strstr(endptr, "/") != NULL) {
-        // For speed units, just copy the unit as is
-        strncpy(unit, endptr, 15);
-        unit[15] = '\0';
-        return value;
-    }
-    
-    // Check if this is a data storage unit or time unit
-    bool is_data_storage = false;
-    bool is_time_unit = false;
-    
-    for (int i = 0; i < unit_count; i++) {
-        char normalized_symbol[8];
-        strcpy(normalized_symbol, units[i].symbol);
-        normalize_unit_name(normalized_symbol);
-        
-        char temp_unit[16];
-        strncpy(temp_unit, endptr, 15);
-        temp_unit[15] = '\0';
-        normalize_unit_name(temp_unit);
-        
-        if (strcmp(normalized_symbol, temp_unit) == 0) {
-            if (strcmp(units[i].category, "Digital Storage") == 0) {
-                is_data_storage = true;
-            } else if (strcmp(units[i].category, "Time") == 0) {
-                is_time_unit = true;
-            }
-            break;
-        }
-    }
-    
-    // Only apply prefixes if not a data storage unit and not a time unit
-    if (!is_data_storage && !is_time_unit) {
-        // Check for prefix
-        for (int i = 0; prefixes[i].prefix != '\0'; i++) {
-            if (*endptr == prefixes[i].prefix) {
-                value *= prefixes[i].factor;
-                endptr++; // Move past the prefix
-                break;
-            }
-        }
-    }
-    
-    // Copy the remaining unit
+    // Copy the unit as is
     strncpy(unit, endptr, 15);
     unit[15] = '\0';
     
@@ -497,11 +453,6 @@ void get_clean_input(char *buffer, size_t size) {
 
 // Normalize unit names (case insensitive, remove spaces)
 void normalize_unit_name(char *unit) {
-    // Check if this is a speed unit by looking for "/" in the symbol
-    if (strstr(unit, "/") != NULL) {
-        return; // Don't modify speed units at all
-    }
-    
     // Special case for time units to preserve case
     if (strcmp(unit, "min") == 0 || strcmp(unit, "hr") == 0 || 
         strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0) {
