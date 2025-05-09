@@ -488,11 +488,15 @@ void get_clean_input(char *buffer, size_t size) {
 
 // Normalize unit names (case insensitive, remove spaces)
 void normalize_unit_name(char *unit) {
-    // Special case for time units and speed units to preserve case
+    // Check if this is a speed unit by looking for "/" in the symbol
+    if (strstr(unit, "/") != NULL) {
+        return; // Don't modify speed units at all
+    }
+    
+    // Special case for time units to preserve case
     if (strcmp(unit, "min") == 0 || strcmp(unit, "hr") == 0 || 
-        strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0 ||
-        strstr(unit, "/") != NULL) {  // Check for speed units with "/"
-        return; // Don't modify time units or speed units
+        strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0) {
+        return; // Don't modify time units
     }
     
     // Convert to uppercase for other units
