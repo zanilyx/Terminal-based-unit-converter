@@ -334,11 +334,35 @@ void initialize_units() {
     units[unit_count++] = (Unit){"Ounce", "oz", 28.349523125, "Mass", false, {{""}, {""}}, 0};
 
     // Time
-    units[unit_count++] = (Unit){"Second", "s", 1.0, "Time", false, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Minute", "min", 60.0, "Time", false, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Hour", "hr", 3600.0, "Time", false, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Day", "day", 86400.0, "Time", false, {{""}, {""}}, 0};
-    units[unit_count++] = (Unit){"Week", "week", 604800.0, "Time", false, {{""}, {""}}, 0};
+    units[unit_count++] = (Unit){
+        "Second", "s", 1.0, "Time", false,
+        {"sec", "secs", "SEC", "", "", "", "", "", "", ""}, 3,
+        "Base unit of time in the SI system"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Minute", "min", 60.0, "Time", false,
+        {"mins", "MIN", "", "", "", "", "", "", "", ""}, 2,
+        "60 seconds"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Hour", "hr", 3600.0, "Time", false,
+        {"hours", "HR", "h", "", "", "", "", "", "", ""}, 3,
+        "60 minutes, 3600 seconds"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Day", "day", 86400.0, "Time", false,
+        {"days", "DAY", "", "", "", "", "", "", "", ""}, 2,
+        "24 hours, 86400 seconds"
+    };
+    
+    units[unit_count++] = (Unit){
+        "Week", "week", 604800.0, "Time", false,
+        {"weeks", "WEEK", "", "", "", "", "", "", "", ""}, 2,
+        "7 days, 604800 seconds"
+    };
 
     // Volume
     units[unit_count++] = (Unit){"Liter", "L", 1.0, "Volume", false, {{"litre"}, {""}}, 1};
@@ -417,7 +441,8 @@ void get_clean_input(char *buffer, size_t size) {
 void normalize_unit_name(char *unit) {
     // Special case for time units to preserve case
     if (strcmp(unit, "min") == 0 || strcmp(unit, "hr") == 0 || 
-        strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0) {
+        strcmp(unit, "day") == 0 || strcmp(unit, "week") == 0 ||
+        strcmp(unit, "s") == 0) {
         return; // Don't modify time units
     }
     
